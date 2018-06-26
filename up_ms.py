@@ -5,11 +5,11 @@ import MySQLdb
 app = Flask(__name__)
 api = Api(app)
 
-IP = 'localhost'
+IP = '192.168.1.65'
 
 def getConnection():
     connection = MySQLdb.connect(
-        host = IP,
+        host = 'localhost',
         user = 'root',
         passwd = 'j24-cb09-ygo94',
         db = 'UserMath'
@@ -46,10 +46,12 @@ def createUser(email, pswd):
     cursor.close()
     connection.close()
 
-@app.route('/updateUser/<nemail>/<oemail>/<pswd>', methods=['POST'])
-def updateUser(nemail, oemail, pswd):
-    query = 'update User set email=%s, pswd=%s where email=%s; commit;'
-    data = (nemail, pswd, oemail)
+    return 'ok'
+
+@app.route('/updateUser/<nemail>/<oemail>/<pswd>/<pswd2>', methods=['POST'])
+def updateUser(nemail, oemail, pswd, pswd2):
+    query = 'update User set email=%s, pswd=%s where email=%s and pswd=%s; commit;'
+    data = (nemail, pswd, oemail, pwsd2)
 
     connection = getConnection()
     cursor = connection.cursor()
@@ -62,15 +64,15 @@ def updateUser(nemail, oemail, pswd):
 
     return jsonify(result)
 
-@app.route('/deleteUser/<email>', methods=['DELETE'])
-def deleteUser(email):
-    query  = 'delete from User where email=\'{}\'; commit;'
-    query = query.format(email)
+@app.route('/deleteUser/<email>/<pwsd>', methods=['DELETE'])
+def deleteUser(email, pwsd):
+    query  = 'delete from User where email=%s and pswd=%s; commit;'
+    data = (email, pwsd)
 
     connection = getConnection()
     cursor = connection.cursor()
 
-    cursor.execute(query)
+    cursor.execute(query, data)
     result = cursor.fetchall()
 
     cursor.close()
