@@ -5,14 +5,12 @@ import MySQLdb
 app = Flask(__name__)
 api = Api(app)
 
-IP = '192.168.1.65'
-
 def getConnection():
     connection = MySQLdb.connect(
         host = 'localhost',
         user = 'root',
-        passwd = 'j24-cb09-ygo94',
-        db = 'UserMath'
+        passwd = '****',
+        db = '***'
     )
     return connection
 
@@ -81,4 +79,4 @@ def deleteUser(email, pwsd):
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(host=IP, port=9080)
+    app.run(host='localhost', port=9080)
